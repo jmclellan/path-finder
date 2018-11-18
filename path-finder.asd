@@ -1,8 +1,8 @@
 ;;;; path-finder.asd
 
 (asdf:defsystem #:path-finder
-  :description "Describe path-finder here"
-  :author "Your Name <your.name@example.com>"
+  :description "a site built in lisp to help organize travel plans"
+  :author "jvl.mclellan@gmail.com"
   :license  "Specify license here"
   :version "0.0.1"
   :serial t
