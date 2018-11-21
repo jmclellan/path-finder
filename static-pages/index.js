@@ -70,13 +70,13 @@ map.on('load', function (e) {
     // Initialize the list
     buildLocationList(stores);
     
-             map.addSource('single-point', {
-                 "type": "geojson",
-                 "data": {
-                     "type": "FeatureCollection",
-                     "features": []
-                 }
-             });
+    map.addSource('single-point', {
+        "type": "geojson",
+        "data": {
+            "type": "FeatureCollection",
+            "features": []
+        }
+    });
     
     map.addLayer({
         "id": "point",
@@ -92,14 +92,39 @@ map.on('load', function (e) {
     geocoder.on('result', function(ev) {
         console.log(JSON.stringify(ev));
         // here i need to be pushing the points to a list that i can contain
+        all_locations.push(ev);
+        // add a marker that will stay
         // then populate the side bar
+
         // then add a button to send it to the lisp server and
         // optimize the route
         map.getSource('single-point').setData(ev.result.geometry);
              });
 });
 
+function request_route_optimization() {
+    // use the all_locations variable as data source
+    // fires request off to the server and serves the response back as an alert
+    var coordinates_lst = all_locations.map(obj => obj['result']['center']);
 
+
+    $.ajax({
+        url:"optimize-route",
+        type:"POST",
+        data:"coordinates="+JSON.stringify(coordinates_lst),
+        contentType:"application/x-www-form-urlencoded",
+        dataType:"json",
+        success: function(resp){
+            console.log("server response = " + resp);
+        }
+    });
+
+    // $.post("optimize-route", function(resp){
+    //     console.log("server response = " + resp);
+    // },
+    //        data="coordinates="+JSON.stringify(coordinates_lst));
+    return true;
+}
 
 // This is where your interactions with the symbol layer used to be
 // Now you have interactions with DOM markers instead
@@ -147,11 +172,11 @@ function createPopUp(currentFeature) {
     if (popUps[0]) popUps[0].remove();
 
     
-             var popup = new mapboxgl.Popup({closeOnClick: false})
-                 .setLngLat(currentFeature.geometry.coordinates)
-                 .setHTML('<h3>Sweetgreen</h3>' +
-                          '<h4>' + currentFeature.properties.address + '</h4>')
-                 .addTo(map);
+    var popup = new mapboxgl.Popup({closeOnClick: false})
+        .setLngLat(currentFeature.geometry.coordinates)
+        .setHTML('<h3>Sweetgreen</h3>' +
+                 '<h4>' + currentFeature.properties.address + '</h4>')
+        .addTo(map);
 }
 
 

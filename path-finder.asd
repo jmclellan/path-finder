@@ -6,6 +6,6 @@
   :license  "Specify license here"
   :version "0.0.1"
   :serial t
-  :depends-on (#:alexandria #:hunchentoot)
+  :depends-on (#:alexandria #:hunchentoot #:drakma #:cl-json)
   :components ((:file "package")
                (:file "path-finder")))
